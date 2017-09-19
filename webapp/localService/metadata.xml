@@ -1,0 +1,78 @@
+<edmx:Edmx
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+    <edmx:Reference
+        xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Uri="./IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='DEC_TRUSTED')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZWTY_SERVICE_HISTORY_LOAD_SRV" xml:lang="en" sap:schema-version="1">
+            <EntityType Name="ZWTY_C_SRVCHST_LOADType" sap:label="Service History Load Log" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="service_history_id"/>
+                </Key>
+                <Property Name="service_history_id" Type="Edm.Guid" Nullable="false" sap:display-format="UpperCase" sap:label="GUID 16" sap:quickinfo="GUID in 'CHAR' Format in Uppercase"/>
+                <Property Name="repair_order_number" Type="Edm.String" MaxLength="20" sap:display-format="UpperCase" sap:label="RO Number" sap:quickinfo="Repair Order number"/>
+                <Property Name="service_date" Type="Edm.DateTime" Precision="0" sap:display-format="Date" sap:label="Service Date" sap:quickinfo="System Date"/>
+                <Property Name="service_number" Type="Edm.String" MaxLength="12" sap:display-format="UpperCase" sap:label="Service Number" sap:quickinfo="Number of Warranty Claim"/>
+                <Property Name="external_object_number" Type="Edm.String" MaxLength="40" sap:label="VIN" sap:quickinfo="External Object Number"/>
+                <Property Name="loadStatus" Type="Edm.String" MaxLength="1" sap:display-format="UpperCase" sap:text="to_loadStatus/loadStatus_Text" sap:label="Status" sap:quickinfo="Load Status for Service History" sap:value-list="standard"/>
+                <Property Name="loadStatusText" Type="Edm.String" MaxLength="37" sap:display-format="UpperCase" sap:label="Status"/>
+                <Property Name="loaded_on" Type="Edm.DateTimeOffset" Precision="0" sap:label="Loaded On" sap:quickinfo="UTC Time Stamp in Short Form (YYYYMMDDhhmmss)"/>
+                <Property Name="errorMessage" Type="Edm.String"/>
+                <NavigationProperty Name="to_loadStatus" Relationship="ZWTY_SERVICE_HISTORY_LOAD_SRV.assoc_217E0AEDA177BBACF9A1EF8C8242B83F" FromRole="FromRole_assoc_217E0AEDA177BBACF9A1EF8C8242B83F" ToRole="ToRole_assoc_217E0AEDA177BBACF9A1EF8C8242B83F"/>
+            </EntityType>
+            <EntityType Name="ZWTY_V_SRVCHST_LOAD_STATUSType" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="loadStatus"/>
+                    <PropertyRef Name="valuePosition"/>
+                </Key>
+                <Property Name="loadStatus" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:text="loadStatus_Text" sap:label="Dom. lower value" sap:quickinfo="Values for Domains: Single Value / Upper Limit"/>
+                <Property Name="loadStatus_Text" Type="Edm.String" MaxLength="60" sap:label="Service History Load Status Text" sap:quickinfo="Short Text for Fixed Values" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="valuePosition" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="NonNegative" sap:label="Value key" sap:quickinfo="Domain value key"/>
+            </EntityType>
+            <Association Name="assoc_217E0AEDA177BBACF9A1EF8C8242B83F" sap:content-version="1">
+                <End Type="ZWTY_SERVICE_HISTORY_LOAD_SRV.ZWTY_C_SRVCHST_LOADType" Multiplicity="1" Role="FromRole_assoc_217E0AEDA177BBACF9A1EF8C8242B83F"/>
+                <End Type="ZWTY_SERVICE_HISTORY_LOAD_SRV.ZWTY_V_SRVCHST_LOAD_STATUSType" Multiplicity="0..1" Role="ToRole_assoc_217E0AEDA177BBACF9A1EF8C8242B83F"/>
+            </Association>
+            <EntityContainer Name="ZWTY_SERVICE_HISTORY_LOAD_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ZWTY_C_SRVCHST_LOAD" EntityType="ZWTY_SERVICE_HISTORY_LOAD_SRV.ZWTY_C_SRVCHST_LOADType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="ZWTY_V_SRVCHST_LOAD_STATUS" EntityType="ZWTY_SERVICE_HISTORY_LOAD_SRV.ZWTY_V_SRVCHST_LOAD_STATUSType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:content-version="1"/>
+                <AssociationSet Name="assoc_217E0AEDA177BBACF9A1EF8C8242B83F" Association="ZWTY_SERVICE_HISTORY_LOAD_SRV.assoc_217E0AEDA177BBACF9A1EF8C8242B83F" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZWTY_C_SRVCHST_LOAD" Role="FromRole_assoc_217E0AEDA177BBACF9A1EF8C8242B83F"/>
+                    <End EntitySet="ZWTY_V_SRVCHST_LOAD_STATUS" Role="ToRole_assoc_217E0AEDA177BBACF9A1EF8C8242B83F"/>
+                </AssociationSet>
+            </EntityContainer>
+            <Annotations
+                xmlns="http://docs.oasis-open.org/odata/ns/edm" Target="ZWTY_SERVICE_HISTORY_LOAD_SRV.ZWTY_C_SRVCHST_LOADType/loadStatus">
+                <Annotation Term="Common.ValueList">
+                    <Record>
+                        <PropertyValue Property="Label" String=""/>
+                        <PropertyValue Property="CollectionPath" String="ZWTY_V_SRVCHST_LOAD_STATUS"/>
+                        <PropertyValue Property="SearchSupported" Bool="true"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="loadStatus"/>
+                                    <PropertyValue Property="ValueListProperty" String="loadStatus"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="loadStatus_Text"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="valuePosition"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <atom:link
+                xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="./sap/ZWTY_SERVICE_HISTORY_LOAD_SRV/$metadata"/>
+                <atom:link
+                    xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version" href="./sap/ZWTY_SERVICE_HISTORY_LOAD_SRV/$metadata"/>
+                </Schema>
+            </edmx:DataServices>
+        </edmx:Edmx>
